@@ -1,0 +1,33 @@
+<nz-layout>
+   
+    <nz-header>
+      <div class="logo">CRUD Application</div>
+     
+    </nz-header>
+  
+    <nz-layout>
+      
+      <nz-sider [nzWidth]="200" class="custom-sidebar">
+        <ul nz-menu nzMode="inline" nzTheme="dark">
+          <li nz-menu-item routerLink="/dashboard">
+            <i nz-icon nzType="appstore" nzTheme="outline"></i> Dashboard
+          </li>
+          <li nz-menu-item routerLink="/posts">
+            <i nz-icon nzType="file-text" nzTheme="outline"></i> Posts
+          </li>
+          <li nz-menu-item routerLink="/settings">
+            <i nz-icon nzType="setting" nzTheme="outline"></i> Settings
+          </li>
+        </ul>
+      </nz-sider>
+  
+     
+      <nz-content>
+        <div class="content">
+        
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
+  

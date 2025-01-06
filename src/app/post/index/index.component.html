@@ -1,0 +1,40 @@
+<div class="container">
+  <button nz-button nzType="primary" nzShape="round" [routerLink]="'/post/create'" class="post-btn">
+    <i nz-icon nzType="plus" nzTheme="outline"></i>
+    <span class="button-text"> Create Post</span>
+  </button>
+
+  <nz-table #editRowTable nzShowSizeChanger [nzFrontPagination]="false" nzBordered [nzData]="posts"
+    [nzScroll]="{ x: 'auto' }" [nzPageSizeOptions]="[5, 20, 50]" [nzPageIndex]="pageIndex" [nzTotal]="total"
+    [nzPageSize]="pageSize" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="onPageIndexChange($event)"
+    #sortTable (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th nzWidth="5%" nzAlign="center">Id</th>
+        <th nzWidth="25%" nzAlign="center">Title</th>
+        <th nzWidth="35%" nzAlign="center">Post</th>
+        <th nzWidth="15%" nzAlign="center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let post of posts; let i = index">
+        <td>{{(pageSize*(pageIndex-1)) + i + 1}}</td>
+        <td nzAlign="center">{{ post.id }}</td>
+        <td nzAlign="left">{{ post.title }}</td>
+        <td nzAlign="left">{{ post.body }}</td>
+        <td nzAlign="center">
+          <button nz-button nzType="default" [routerLink]="['/post', post.id, 'view']">
+            <i nz-icon nzType="eye" nzTheme="outline"></i> View
+          </button>
+          <button nz-button nzType="primary" [routerLink]="['/post', post.id, 'edit']">
+            <i nz-icon nzType="edit" nzTheme="outline"></i> Edit
+          </button>
+          <button nz-button nzType="danger" (click)="deletePost(post.id)">
+            <i nz-icon nzType="delete" nzTheme="outline"></i> Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
