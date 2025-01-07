@@ -3,8 +3,11 @@ import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post';
 
+
 @Component({
   selector: 'app-view',
+  standalone: true,
+  imports: [],
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
@@ -14,7 +17,7 @@ export class ViewComponent implements OnInit {
   constructor(
     private postService: PostService,
     private route: ActivatedRoute,
-    private router: Router  // Thêm Router vào constructor
+    private router: Router  
   ) {}
 
   ngOnInit(): void {
@@ -24,7 +27,7 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  // Phương thức quay lại trang index
+  
   goBack(): void {
     this.router.navigate(['/post/index']);
   }

@@ -4,11 +4,16 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PostService } from '../post.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+
+
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,NzAlertModule,NzButtonModule,NzInputModule],
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css'] 
 })
@@ -49,5 +54,8 @@ export class CreateComponent {
         this.router.navigateByUrl('post/index');
       });
     }
+  }
+  goBack(): void {
+    this.router.navigate(['/post/index']);
   }
 }
