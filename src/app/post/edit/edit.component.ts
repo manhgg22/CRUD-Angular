@@ -10,6 +10,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzAlertComponent } from 'ng-zorro-antd/alert';
 
+
 @Component({
   selector: 'app-edit',
   standalone: true,
@@ -30,10 +31,9 @@ export class EditComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.postService.find(id).subscribe(post => {
-      this.post = post;
-      this.initializeForm();
-    });
+    const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
+    this.post = posts.find(p => p.id === id) || {} as Post;
+    this.initializeForm();
   }
 
   initializeForm(): void {
@@ -53,11 +53,15 @@ export class EditComponent implements OnInit {
         ...this.post,
         ...this.form.value
       };
-      this.postService.update(this.post.id, updatedPost).subscribe((res: any) => {
-        alert('Data Updated Successfully');
-        this.update.emit(updatedPost);
-        this.router.navigate(['/post/index']);
-      });
+      const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
+      const index = posts.findIndex(p => p.id === updatedPost.id);
+      if (index !== -1) {
+        posts[index] = updatedPost;
+        localStorage.setItem('arr', JSON.stringify(posts));
+      }
+      alert('Data Updated Successfully');
+      this.update.emit(updatedPost);
+      this.router.navigate(['/post/index']);
     }
   }
   goBack(): void {
