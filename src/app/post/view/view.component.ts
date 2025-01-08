@@ -2,22 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post';
+import { EditComponent } from '../edit/edit.component';
+import { NgModule } from '@angular/core';
+
+
+
+
+
+
+
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-view',
-  standalone: true,
-  imports: [],
+  imports: [EditComponent,CommonModule],
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
 export class ViewComponent implements OnInit {
   post: Post | undefined;
+  editMode: boolean = false;
 
   constructor(
     private postService: PostService,
     private route: ActivatedRoute,
-    private router: Router  
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -27,8 +37,12 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  
-  goBack(): void {
-    this.router.navigate(['/post/index']);
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
+  }
+
+  onUpdate(updatedPost: Post): void {
+    this.post = updatedPost;
+    this.editMode = false;
   }
 }

@@ -9,13 +9,12 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 
-
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,NzAlertModule,NzButtonModule,NzInputModule],
+  imports: [CommonModule, ReactiveFormsModule, NzAlertModule, NzButtonModule, NzInputModule],
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.css'] 
+  styleUrls: ['./create.component.css']
 })
 export class CreateComponent {
   form!: FormGroup;
@@ -36,25 +35,30 @@ export class CreateComponent {
   submit() {
     if (this.form.valid) {
       console.log(this.form.value);
-      let body = {
+      const storedPosts = JSON.parse(localStorage.getItem('arr') || '[]');
+
+      const newId = storedPosts.length > 0
+        ? Math.max(...storedPosts.map((post: any) => post.id)) + 1
+        : 1;
+
+
+      const newPost = {
         userId: 2,
-        id: 11,
+        id: newId,
         ...this.form.value
-      }
-      const temp = new BehaviorSubject(JSON.parse(localStorage.getItem('arr') ?? ''));
-      let newArr = [...temp.value].concat([body]);
+      };
+
+      const updatedPosts = [...storedPosts, newPost];
+      localStorage.setItem('arr', JSON.stringify(updatedPosts));
+
       
-      localStorage.setItem('arr', JSON.stringify(newArr));
-
-
-      // localStorage.setItem('arr', )
-      this.postService.create(this.form.value).subscribe((res: any) => {
-        // let body 
-        alert("Post created successfully");
+      this.postService.create(newPost).subscribe(() => {
+        alert('Post created successfully');
         this.router.navigateByUrl('post/index');
       });
     }
   }
+
   goBack(): void {
     this.router.navigate(['/post/index']);
   }

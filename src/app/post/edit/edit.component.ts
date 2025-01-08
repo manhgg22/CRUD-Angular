@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { PostService } from '../post.service';
 import { Post } from '../post';
@@ -12,26 +12,30 @@ import { CommonModule } from '@angular/common';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent {
-  id!: number;
-  post!: Post;
+export class EditComponent implements OnInit, OnChanges {
+  @Input() post!: Post;
+  @Output() update = new EventEmitter<Post>();
   form!: FormGroup;
 
   constructor(
     public postService: PostService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['postId'];
+    this.initializeForm();
+  }
 
-    this.postService.find(this.id).subscribe((data: Post) => {
-      this.post = data;
-      this.form = new FormGroup({
-        title: new FormControl(this.post.title, [Validators.required]),
-        body: new FormControl(this.post.body, Validators.required)
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['post'] && changes['post'].currentValue) {
+      this.initializeForm();
+    }
+  }
+
+  initializeForm(): void {
+    this.form = new FormGroup({
+      title: new FormControl(this.post?.title, [Validators.required]),
+      body: new FormControl(this.post?.body, Validators.required)
     });
   }
 
@@ -41,10 +45,14 @@ export class EditComponent {
 
   submit() {
     if (this.form.valid) {
-      console.log(this.form.value);
-      this.postService.update(this.id, this.form.value).subscribe((res: any) => {
+      const updatedPost: Post = {
+        ...this.post,
+        ...this.form.value
+      };
+      this.postService.update(this.post.id, updatedPost).subscribe((res: any) => {
         alert('Data Updated Successfully');
-        this.router.navigate(['/post/index']);  
+        this.update.emit(updatedPost);
+        this.router.navigate(['/post/index']);
       });
     }
   }

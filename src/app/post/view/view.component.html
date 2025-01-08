@@ -1,13 +1,4 @@
-
-
-<div class="container">
-  <h1>View Post</h1>
- 
-
-
-
-  <button class="btn btn-primary" (click)="goBack()">Back</button>
-
+<div>
   <div>
     <strong>ID:</strong>
     <p>{{ post?.id }}</p>
@@ -21,5 +12,10 @@
   <div>
     <strong>Body:</strong>
     <p>{{ post?.body }}</p>
+  </div>
+
+  <div *ngIf="post">
+    <button (click)="toggleEditMode()">Edit</button>
+    <app-edit *ngIf="editMode" [post]="post!" (update)="onUpdate($event)"></app-edit>
   </div>
 </div>
