@@ -2,21 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { PostService } from '../post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../post';
-import { EditComponent } from '../edit/edit.component';
-import { NgModule } from '@angular/core';
-
-
-
-
-
-
-
 import { CommonModule } from '@angular/common';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 
 @Component({
   selector: 'app-view',
-  imports: [EditComponent,CommonModule],
+  imports: [CommonModule, NzInputModule,NzButtonModule,NzAlertModule],
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
@@ -44,5 +38,8 @@ export class ViewComponent implements OnInit {
   onUpdate(updatedPost: Post): void {
     this.post = updatedPost;
     this.editMode = false;
+  }
+  goBack(): void {
+    this.router.navigate(['/post/index']);
   }
 }

@@ -1,0 +1,5 @@
+textarea {
+    white-space: nowrap;
+    overflow-x: auto; /* Thêm thanh cuộn ngang nếu cần */
+  }
+  

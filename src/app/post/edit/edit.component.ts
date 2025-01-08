@@ -1,35 +1,39 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { PostService } from '../post.service';
 import { Post } from '../post';
 import { CommonModule } from '@angular/common';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzAlertComponent } from 'ng-zorro-antd/alert';
 
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,NzAlertComponent, NzButtonModule, NzFormModule, NzInputModule, NzGridModule],
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent implements OnInit, OnChanges {
-  @Input() post!: Post;
+export class EditComponent implements OnInit {
+  post!: Post;
   @Output() update = new EventEmitter<Post>();
   form!: FormGroup;
 
   constructor(
     public postService: PostService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.initializeForm();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['post'] && changes['post'].currentValue) {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.postService.find(id).subscribe(post => {
+      this.post = post;
       this.initializeForm();
-    }
+    });
   }
 
   initializeForm(): void {
@@ -55,5 +59,8 @@ export class EditComponent implements OnInit, OnChanges {
         this.router.navigate(['/post/index']);
       });
     }
+  }
+  goBack(): void {
+    this.router.navigate(['/post/index']);
   }
 }
