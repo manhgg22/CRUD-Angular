@@ -97,9 +97,11 @@ export class IndexComponent implements OnInit {
 
   
   deletePost(id: number): void {
-    this.postService.delete(id).subscribe(() => {
-      this.posts = this.posts.filter(item => item.id !== id);
-      alert('Post deleted successfully');
-    });
+    const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
+    const updatedPosts = posts.filter(post => post.id !== id);
+    localStorage.setItem('arr', JSON.stringify(updatedPosts));
+    this.posts = this.posts.filter(item => item.id !== id);
+    alert('Post deleted successfully');
+    
   }
 }

@@ -21,7 +21,7 @@ export class ViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router 
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -36,11 +36,5 @@ export class ViewComponent implements OnInit {
   onUpdate(updatedPost: Post): void {
     this.post = updatedPost;
     this.editMode = false;
-    const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
-    const index = posts.findIndex(p => p.id === updatedPost.id);
-    if (index !== -1) {
-      posts[index] = updatedPost;
-      localStorage.setItem('arr', JSON.stringify(posts));
-    }
   }
 }

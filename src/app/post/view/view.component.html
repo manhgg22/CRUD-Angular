@@ -14,7 +14,7 @@
       <textarea nz-input nz-textarea id="body" class="form-control" readonly>{{ post?.body }}</textarea>
     </div>
 
-
+    <button nz-button nzType="primary" (click)="editMode = !editMode" class="mt-3 w-100">Edit</button>
     <app-edit *ngIf="editMode" [post]="post" (update)="onUpdate($event)"></app-edit>
   </div>
 </div>
