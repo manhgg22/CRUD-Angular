@@ -5,15 +5,18 @@ import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { EditComponent } from '../edit/edit.component';
 
 @Component({
   selector: 'app-view',
-  imports: [CommonModule, NzInputModule, NzButtonModule, NzAlertModule],
+  standalone: true,
+  imports: [CommonModule, NzInputModule, NzButtonModule, NzAlertModule, EditComponent],
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
 export class ViewComponent implements OnInit {
   post: Post | undefined;
+  editMode = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,5 +31,16 @@ export class ViewComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/post/index']);
+  }
+
+  onUpdate(updatedPost: Post): void {
+    this.post = updatedPost;
+    this.editMode = false;
+    const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
+    const index = posts.findIndex(p => p.id === updatedPost.id);
+    if (index !== -1) {
+      posts[index] = updatedPost;
+      localStorage.setItem('arr', JSON.stringify(posts));
+    }
   }
 }

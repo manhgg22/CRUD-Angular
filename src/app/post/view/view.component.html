@@ -3,15 +3,18 @@
   
   <button class="btn btn-primary" (click)="goBack()">Back</button>
 
-  <div class="form-group mt-4">
-    <label for="title">Title:</label>
-    <input nz-input type="text" id="title" [value]="post?.title" class="form-control" readonly>
-  </div>
-  
-  <div class="form-group mt-4">
-    <label for="body">Body:</label>
-    <textarea nz-input nz-textarea id="body" class="form-control" readonly>{{ post?.body }}</textarea>
-  </div>
+  <div *ngIf="post">
+    <div class="form-group mt-4">
+      <label for="title">Title:</label>
+      <input nz-input type="text" id="title" [value]="post?.title" class="form-control" readonly>
+    </div>
+    
+    <div class="form-group mt-4">
+      <label for="body">Body:</label>
+      <textarea nz-input nz-textarea id="body" class="form-control" readonly>{{ post?.body }}</textarea>
+    </div>
 
-  
+
+    <app-edit *ngIf="editMode" [post]="post" (update)="onUpdate($event)"></app-edit>
+  </div>
 </div>

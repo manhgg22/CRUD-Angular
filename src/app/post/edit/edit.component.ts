@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { PostService } from '../post.service';
@@ -10,16 +10,15 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzAlertComponent } from 'ng-zorro-antd/alert';
 
-
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule,NzAlertComponent, NzButtonModule, NzFormModule, NzInputModule, NzGridModule],
+  imports: [ReactiveFormsModule, CommonModule, NzAlertComponent, NzButtonModule, NzFormModule, NzInputModule, NzGridModule],
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
-  post!: Post;
+  @Input() post!: Post;
   @Output() update = new EventEmitter<Post>();
   form!: FormGroup;
 
@@ -30,9 +29,11 @@ export class EditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
-    this.post = posts.find(p => p.id === id) || {} as Post;
+    if (!this.post) {
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+      const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
+      this.post = posts.find(p => p.id === id) || {} as Post;
+    }
     this.initializeForm();
   }
 
@@ -61,9 +62,9 @@ export class EditComponent implements OnInit {
       }
       alert('Data Updated Successfully');
       this.update.emit(updatedPost);
-      this.router.navigate(['/post/index']);
     }
   }
+
   goBack(): void {
     this.router.navigate(['/post/index']);
   }
