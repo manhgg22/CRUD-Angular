@@ -21,7 +21,7 @@ export class ViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router 
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));

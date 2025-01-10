@@ -19,9 +19,6 @@ import { NzAlertComponent } from 'ng-zorro-antd/alert';
 })
 export class EditComponent implements OnInit {
   @Input() post!: Post;
-  ngOnChanges(): void {
-    console.log('Data received via @Input:', this.post);
-  }
   @Output() update = new EventEmitter<Post>();
   form!: FormGroup;
 
@@ -36,7 +33,6 @@ export class EditComponent implements OnInit {
       const id = Number(this.route.snapshot.paramMap.get('id'));
       const posts = JSON.parse(localStorage.getItem('arr') || '[]') as Post[];
       this.post = posts.find(p => p.id === id) || {} as Post;
-       console.log('Data fetched from localStorage:', this.post);
     }
     this.initializeForm();
   }
@@ -66,8 +62,6 @@ export class EditComponent implements OnInit {
       }
       alert('Data Updated Successfully');
       this.update.emit(updatedPost);
-      console.log('Data emitted via @Output:', updatedPost);
-      this.router.navigate(['/post/index']);
     }
   }
 
